@@ -754,8 +754,16 @@ public:
 
 private:
 
+    /**
+     * Return 'regexp' wrapped so that it only matches if the complete text
+     * matches - like the old QRegExp::exactMatch() did.
+     **/
+    static QRegularExpression anchored( const QRegularExpression & regexp );
+
+
     YQPkgObjList *	_parent;
     QRegularExpression	_regexp;
+    QRegularExpression	_anchoredRegexp;
     int			_column;
     bool		_enabled;
 };

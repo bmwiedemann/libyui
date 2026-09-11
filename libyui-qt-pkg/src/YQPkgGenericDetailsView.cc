@@ -180,14 +180,9 @@ YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable, bool showVersion )
 QString
 YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
 {
-    QString html = plainText;
     // yuiDebug() << "Escaping \"" << plainText << "\"" << endl;
 
-    html.replace( "&", "&amp;" );
-    html.replace( "<", "&lt;"  );
-    html.replace( ">", "&gt;"  );
-
-    return html;
+    return plainText.toHtmlEscaped();
 }
 
 

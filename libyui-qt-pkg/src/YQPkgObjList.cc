@@ -1543,10 +1543,19 @@ YQPkgObjList::ExcludeRule::ExcludeRule( YQPkgObjList *	parent,
 					int		column )
     : _parent( parent )
     , _regexp( regexp )
+    , _anchoredRegexp( anchored( regexp ) )
     , _column( column )
     , _enabled( true )
 {
     _parent->addExcludeRule( this );
+}
+
+
+QRegularExpression
+YQPkgObjList::ExcludeRule::anchored( const QRegularExpression & regexp )
+{
+    return QRegularExpression( QRegularExpression::anchoredPattern( regexp.pattern() ),
+			       regexp.patternOptions() );
 }
 
 
@@ -1566,7 +1575,8 @@ YQPkgObjList::ExcludeRule::enable( bool enable )
 void
 YQPkgObjList::ExcludeRule::setRegexp( const QRegularExpression & regexp )
 {
-    _regexp = regexp;
+    _regexp	    = regexp;
+    _anchoredRegexp = anchored( regexp );
 }
 
 
@@ -1588,12 +1598,7 @@ YQPkgObjList::ExcludeRule::match( QTreeWidgetItem * item )
     if ( text.isEmpty() )
 	return false;
 
-    // like the old QRegExp::exactMatch(): the entire text has to match
-    QRegularExpressionMatch match = _regexp.match( text );
-
-    return match.hasMatch()
-	&& match.capturedStart( 0 ) == 0
-	&& match.capturedEnd( 0 ) == text.length();
+    return _anchoredRegexp.match( text ).hasMatch();
 }
 
 

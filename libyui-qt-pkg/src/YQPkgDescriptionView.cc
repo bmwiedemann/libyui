@@ -313,12 +313,16 @@ YQPkgDescriptionView::findDesktopFiles( const list<string> & fileList ) const
 {
     QStringList desktopFiles;
 
+    // Compiling a QRegularExpression is expensive, and a package's file list
+    // can easily have thousands of entries: only do it once.
+    static const QRegularExpression desktopFileRegexp( DESKTOPFILEDIR );
+
     for ( list<string>::const_iterator it = fileList.begin();
 	    it != fileList.end(); ++it )
     {
 	QString line = fromUTF8( *it );
 
-	if ( line.contains( QRegularExpression( DESKTOPFILEDIR ) ) )
+	if ( line.contains( desktopFileRegexp ) )
 	    desktopFiles << line;
     }
 

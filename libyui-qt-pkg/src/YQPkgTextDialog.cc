@@ -264,14 +264,9 @@ bool YQPkgTextDialog::confirmText( QWidget * 		parent,
 QString
 YQPkgTextDialog::htmlEscape( const QString & plainText )
 {
-    QString html = plainText;
     // yuiDebug() << "Escaping \"" << plainText << "\"" << endl;
 
-    html.replace( "&", "&amp;" );
-    html.replace( "<", "&lt;"  );
-    html.replace( ">", "&gt;"  );
-
-    return html;
+    return plainText.toHtmlEscaped();
 }
 
 
@@ -284,7 +279,7 @@ YQPkgTextDialog::htmlParagraphs( const string & rawText )
     if ( text.contains( "<!-- DT:Rich -->" ) )	// Special doctype for preformatted HTML
 	return text;
 
-    text = htmlEscape( text );			// Escape '<', '>', '&'
+    text = htmlEscape( text );			// Escape '<', '>', '&', '"'
     text.replace( "\n\n", "</p><p>" );		// Empty lines mean new paragraph
     text.prepend( "<p>"  );
     text.append ( "</p>" );
