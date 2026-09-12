@@ -159,6 +159,15 @@ protected:
      **/
     bool check( const zypp::Capabilities & capSet, const QRegularExpression & regexp );
 
+    /**
+     * Return the regexp for the current search text and search mode.
+     *
+     * This is cached: compiling a QRegularExpression is expensive, and
+     * check() is called once per package. QRegExp used to have a global
+     * pattern cache that made this free; QRegularExpression has none.
+     **/
+    const QRegularExpression & currentRegexp();
+
     // Data members
 
     QComboBox *		_searchText;
@@ -176,6 +185,13 @@ protected:
     QCheckBox *		_caseSensitive;
 
     int			_matchCount;
+
+    // Cached regexp for currentRegexp() and the inputs it was built from
+
+    QRegularExpression	_regexp;
+    QString		_regexpText;
+    int			_regexpMode;
+    bool		_regexpCaseSensitive;
 };
 
 
